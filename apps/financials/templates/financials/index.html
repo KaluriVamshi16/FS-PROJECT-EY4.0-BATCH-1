@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="dashboard-container">
+    {% include 'includes/sidebar.html' %}
+    <div class="main-content">
+        <header style="margin-bottom: 30px;">
+            <h1>Financial Dashboard</h1>
+        </header>
+
+        <!-- Summary Cards -->
+        <div class="features-grid"
+            style="grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 0; margin-bottom: 30px;">
+            <div class="card">
+                <h3>Net Worth</h3>
+                <p style="font-size: 2rem; color: var(--accent-green); font-weight: bold;">₹{{ net_worth }}</p>
+                <p style="color: var(--text-secondary);">Assets - Liabilities</p>
+            </div>
+            <div class="card">
+                <h3>Total Income</h3>
+                <p style="font-size: 1.5rem; color: var(--text-primary); font-weight: bold;">₹{{ total_income }}</p>
+            </div>
+            <div class="card">
+                <h3>Total Investments</h3>
+                <p style="font-size: 1.5rem; color: var(--text-primary); font-weight: bold;">₹{{ total_investments }}
+                </p>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 30px; margin-bottom: 30px;">
+            <div class="card">
+                <h3>Spending Trend (Last 6 Months)</h3>
+                <canvas id="spendingChart"></canvas>
+            </div>
+            <div class="card">
+                <h3>Spending by Category</h3>
+                <canvas id="categoryChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Investments List -->
+        <div class="card">
+            <h3>Your Investments</h3>
+            <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                <thead style="background: var(--bg-secondary);">
+                    <tr>
+                        <th style="padding: 10px; text-align: left;">Name</th>
+                        <th style="padding: 10px; text-align: left;">Type</th>
+                        <th style="padding: 10px; text-align: right;">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for inv in investments %}
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 10px;">{{ inv.name }}</td>
+                        <td style="padding: 10px;">{{ inv.type }}</td>
+                        <td style="padding: 10px; text-align: right;">₹{{ inv.amount }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" style="padding: 20px; text-align: center;">No investments yet.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Placeholder Charts - data should ideally come from API
+    // Bar Chart
+    const ctx1 = document.getElementById('spendingChart').getContext('2d');
+    new Chart(ctx1, {
+        type: 'bar',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            datasets: [{
+                label: 'Expenses',
+                data: [12000, 19000, 3000, 5000, 2000, 3000],
+                backgroundColor: '#4CAF50'
+            }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+
+    // Pie Chart
+    const ctx2 = document.getElementById('categoryChart').getContext('2d');
+    new Chart(ctx2, {
+        type: 'doughnut',
+        data: {
+            labels: ['Food', 'Travel', 'Rent', 'Shopping'],
+            datasets: [{
+                data: [300, 50, 100, 80],
+                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0']
+            }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+</script>
+{% endblock %}

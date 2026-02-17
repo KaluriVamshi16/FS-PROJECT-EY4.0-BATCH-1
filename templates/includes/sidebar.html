@@ -1,0 +1,25 @@
+<div class="sidebar">
+    <h2 style="text-align: center; margin-bottom: 30px;">FinSight</h2>
+    <ul>
+        <li><a href="{% url 'expense_list' %}"><i class="fas fa-chart-bar"></i> Expense Tracker</a></li>
+        <li><a href="{% url 'dashboard' %}"><i class="fas fa-tachometer-alt"></i> Financial Dashboard</a></li>
+        <li><a href="{% url 'transaction_list' %}"><i class="fas fa-credit-card"></i> Transactions</a></li>
+        <li><a href="{% url 'budget_list' %}"><i class="fas fa-wallet"></i> Budgets</a></li>
+        <li><a href="{% url 'goal_list' %}"><i class="fas fa-trophy"></i> Goals</a></li>
+        <li><a href="{% url 'insights_view' %}"><i class="fas fa-lightbulb"></i> AI Insights</a></li>
+        <li><a href="{% url 'health_score_view' %}"><i class="fas fa-heartbeat"></i> Financial Health Score</a></li>
+        <li><a href="{% url 'settings' %}"><i class="fas fa-cog"></i> Settings</a></li>
+        <li style="margin-top: 50px;"><a href="#" onclick="handleLogout()"><i class="fas fa-sign-out-alt"></i>
+                Logout</a></li>
+    </ul>
+    <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.2);">
+        <p><i class="fas fa-user"></i> {{ request.user.username }}</p>
+    </div>
+</div>
+
+<script>
+    async function handleLogout() {
+        await fetch('/api/auth/logout/', { method: 'POST', headers: { 'X-CSRFToken': '{{ csrf_token }}' } });
+        window.location.href = '/';
+    }
+</script>

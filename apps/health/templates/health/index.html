@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="dashboard-container">
+    {% include 'includes/sidebar.html' %}
+    <div class="main-content">
+        <header style="margin-bottom: 30px;">
+            <h1>Financial Health Score</h1>
+        </header>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+            <!-- Health Score Gauge -->
+            <div class="card"
+                style="text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <h2 style="margin-bottom: 20px;">Your Financial Fitness</h2>
+
+                <div style="position: relative; width: 200px; height: 200px;">
+                    <svg width="200" height="200" viewBox="0 0 200 200">
+                        <circle cx="100" cy="100" r="90" fill="none" stroke="#eee" stroke-width="15" />
+                        <!-- Circumference ~ 565 -->
+                        <circle cx="100" cy="100" r="90" fill="none" stroke="var(--accent-green)" stroke-width="15"
+                            stroke-dasharray="565" stroke-dashoffset="{{ score|add:'-100'|stringformat:'i'|add:'565' }}"
+                            style="transition: stroke-dashoffset 1s ease-out; transform: rotate(-90deg); transform-origin: 50% 50%;" />
+                    </svg>
+                    <div
+                        style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                        <div style="font-size: 3rem; font-weight: bold; color: var(--text-primary);">{{ score }}</div>
+                        <div style="font-size: 1.5rem; color: var(--accent-green);">Grade {{ grade }}</div>
+                    </div>
+                </div>
+
+                <p style="margin-top: 20px; color: var(--text-secondary);">Score calculated based on savings, expenses,
+                    and budget adherence.</p>
+            </div>
+
+            <!-- Breakdown & Tips -->
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+                <div class="card">
+                    <h3>Score Breakdown</h3>
+                    <div style="margin-top: 15px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>Savings Rate</span>
+                            <span>{{ savings_rate|floatformat:1 }}%</span>
+                        </div>
+                        <div style="background: #eee; height: 8px; border-radius: 4px; overflow: hidden;">
+                            <div
+                                style="width: {{ savings_rate }}%; background: var(--accent-green); height: 100%; max-width: 100%;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 15px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>Expense Ratio</span>
+                            <span>{{ expense_ratio|floatformat:1 }}%</span>
+                        </div>
+                        <div style="background: #eee; height: 8px; border-radius: 4px; overflow: hidden;">
+                            <div
+                                style="width: {{ expense_ratio }}%; background: {% if expense_ratio > 80 %}#d32f2f{% else %}var(--accent-green){% endif %}; height: 100%; max-width: 100%;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="flex: 1;">
+                    <h3>Improvement Tips</h3>
+                    <ul style="margin-top: 10px; padding-left: 20px; line-height: 1.6;">
+                        {% for tip in tips %}
+                        <li style="margin-bottom: 10px;">{{ tip }}</li>
+                        {% empty %}
+                        <li>Great job! You are maintaining excellent financial health.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

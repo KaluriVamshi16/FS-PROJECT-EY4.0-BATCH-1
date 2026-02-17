@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="dashboard-container">
+    <!-- Left Sidebar -->
+    {% include 'includes/sidebar.html' %}
+
+    <!-- Center: Main Chatbot Interface -->
+    <div class="main-content">
+        <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <h2>Ask FinSight AI</h2>
+            <select id="language-select" style="padding: 5px; border-radius: 5px; border: 1px solid #ddd;">
+                <option value="en">English</option>
+                <option value="te">Telugu</option>
+                <option value="hi">Hindi</option>
+            </select>
+        </header>
+
+        <div class="chat-container">
+            <div id="chat-messages" class="chat-messages">
+                <div class="message bot">
+                    Hello! I'm FinSight. Ask me about your finances or record an expense like "Spent 500 on food".
+                </div>
+            </div>
+
+            <div
+                style="padding: 15px; background: white; border-top: 1px solid var(--border-color); display: flex; gap: 10px;">
+                <input type="text" id="chat-input" placeholder="Type a message..."
+                    style="flex: 1; padding: 12px; border: 1px solid var(--border-color); border-radius: 20px; outline: none;">
+                <button onclick="sendMessage()" class="btn-primary"
+                    style="border-radius: 50%; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Panel: Context & Stats -->
+    <div class="right-panel">
+        <div class="card" style="margin-bottom: 20px; text-align: center;">
+            <h4>Total Spending</h4>
+            <p id="total-spending" style="font-size: 2rem; color: var(--accent-green); font-weight: bold;">Loading...
+            </p>
+            <p style="font-size: 0.9rem; color: var(--text-secondary);">This Month</p>
+        </div>
+
+        <div class="card" style="margin-bottom: 20px;">
+            <h4>Budget Status</h4>
+            {% for budget in budgets %}
+            <div style="margin-top: 10px;">
+                <p style="font-size: 0.9rem; margin-bottom: 5px;">{{budget.category.name}}
+                    (₹{{budget.spent|floatformat:0}} / ₹{{budget.monthly_limit|floatformat:0}})</p>
+                <div style="background: #eee; height: 6px; border-radius: 3px; overflow: hidden;">
+                    <div
+                        style="width: {{budget.percentage_used|floatformat:0}}%; background: {% if budget.percentage_used >= 75 %}#dc3545{% elif budget.percentage_used > 40 %}#ffc107{% else %}#28a745{% endif %}; height: 100%; border-radius: 3px; transition: width 0.5s ease;">
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 10px;">No budgets set.</p>
+            {% endfor %}
+        </div>
+
+        <div class="card">
+            <h4>Quick Actions</h4>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;">
+                <button class="btn-outline" style="font-size: 0.8rem;"
+                    onclick="window.location.href='{% url 'expense_list' %}'">+ Expense</button>
+                <button class="btn-outline" style="font-size: 0.8rem;"
+                    onclick="window.location.href='{% url 'goal_list' %}'">+ Goal</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Chat Functionality
+    async function sendMessage() {
+        const input = document.getElementById('chat-input');
+        const message = input.value.trim();
+        const lang = document.getElementById('language-select').value;
+        if (!message) return;
+
+        // Add user message
+        const messagesDiv = document.getElementById('chat-messages');
+        messagesDiv.insertAdjacentHTML('beforeend', `<div class="message user">${message}</div>`);
+        input.value = '';
+        setTimeout(() => {
+            messagesDiv.scrollTo({ top: messagesDiv.scrollHeight, behavior: 'smooth' });
+        }, 50);
+
+        try {
+            const response = await fetch('/api/chat/send/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ message, language: lang })
+            });
+            const data = await response.json();
+
+            // Add bot response
+            const formattedResponse = data.response.replace(/\n/g, '<br>');
+            messagesDiv.insertAdjacentHTML('beforeend', `<div class="message bot">${formattedResponse}</div>`);
+
+            setTimeout(() => {
+                messagesDiv.scrollTo({ top: messagesDiv.scrollHeight, behavior: 'smooth' });
+            }, 50);
+
+            if (data.response.includes("Recorded expense")) {
+                loadDashboardData();
+            }
+
+        } catch (error) {
+            console.error('Error sending message:', error);
+            messagesDiv.insertAdjacentHTML('beforeend', `<div class="message bot" style="color: red;">Error connecting to server.</div>`);
+        }
+    }
+
+    document.getElementById('chat-input').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') sendMessage();
+    });
+
+    // Load Dashboard Data (Simple Mock for now, should hit API)
+    async function loadDashboardData() {
+        try {
+            const response = await fetch('/dashboard/api/data/');
+            const data = await response.json();
+            document.getElementById('total-spending').innerText = '₹' + (data.monthly_spending || 0);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    window.onload = loadDashboardData;
+</script>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="dashboard-container">
+    {% include 'includes/sidebar.html' %}
+    <div class="main-content">
+        <header style="margin-bottom: 20px;">
+            <h1>Set New Budget</h1>
+        </header>
+
+        <div class="card" style="max-width: 600px; margin: 0 auto; background: white; padding: 30px;">
+            <form method="post">
+                {% csrf_token %}
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: bold;">Category</label>
+                    {{ form.category }}
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: bold;">Monthly Limit (₹)</label>
+                    {{ form.monthly_limit }}
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: bold;">Month (Select any day in
+                        desired month)</label>
+                    {{ form.month }}
+                </div>
+
+                <div style="display: flex; gap: 10px; margin-top: 30px;">
+                    <button type="submit" class="btn-primary" style="flex: 1;">Save Budget</button>
+                    <a href="{% url 'budget_list' %}" class="btn-outline"
+                        style="text-decoration: none; display: inline-block; text-align: center; padding: 10px 20px;">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-control {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius);
+        font-size: 1rem;
+        box-sizing: border-box;
+    }
+
+    .form-control:focus {
+        border-color: var(--accent-green);
+        outline: none;
+    }
+</style>
+{% endblock %}

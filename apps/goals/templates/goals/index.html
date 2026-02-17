@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="dashboard-container">
+    {% include 'includes/sidebar.html' %}
+    <div class="main-content">
+        <header style="margin-bottom: 20px;">
+            <h1>Savings Goals</h1>
+        </header>
+
+        <div class="goals-layout" style="display: grid; grid-template-columns: 2fr 1fr; gap: 30px;">
+            <!-- Left Column: Goals List -->
+            <div class="goals-list">
+                {% for goal in goals %}
+                <div class="card" style="margin-bottom: 20px; position: relative; overflow: hidden;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
+                        <div>
+                            <span style="font-size: 2rem; margin-right: 10px;">{{ goal.icon }}</span>
+                            <h3 style="display: inline-block; margin: 0; font-size: 1.5rem;">{{ goal.title }}</h3>
+                        </div>
+                        <span
+                            style="background: var(--bg-secondary); color: var(--text-secondary); padding: 5px 10px; border-radius: 10px; font-size: 0.8rem;">
+                            {{ goal.target_date }}
+                        </span>
+                    </div>
+
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                        <span style="color: var(--accent-green); font-weight: bold;">₹{{ goal.current_amount }}
+                            saved</span>
+                        <span style="color: var(--text-secondary);">Target: ₹{{ goal.target_amount }}</span>
+                    </div>
+
+                    <div style="background: #eee; height: 8px; border-radius: 4px; overflow: hidden; margin-top: 10px;">
+                        <div
+                            style="width: {{ goal.progress_percentage }}%; background: var(--accent-green); height: 100%;">
+                        </div>
+                    </div>
+                    <div style="text-align: right; color: var(--text-muted); font-size: 0.8rem; margin-top: 5px;">
+                        {{ goal.progress_percentage }}% Progress
+                    </div>
+                </div>
+                {% empty %}
+                <div style="text-align: center; color: var(--text-secondary); padding: 40px;">
+                    <h3>No goals set yet.</h3>
+                    <p>Start your journey by creating a new goal on the right!</p>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Right Column: Create Form -->
+            <div class="goals-sidebar">
+                <!-- Financial Tips Card -->
+                <div class="card"
+                    style="background: var(--accent-green-light); border: 1px solid var(--accent-green); margin-bottom: 25px;">
+                    <h3 style="color: var(--accent-green-dark); margin-top: 0;">Financial Tips</h3>
+                    <p style="font-style: italic; color: var(--accent-green-dark); line-height: 1.6;">
+                        "Do not save what is left after spending, but spend what is left after saving." - Warren Buffett
+                    </p>
+                </div>
+
+                <!-- New Goal Form -->
+                <div class="card">
+                    <h3 style="margin-top: 0; margin-bottom: 20px;">New Goal</h3>
+                    <form method="post">
+                        {% csrf_token %}
+
+                        {% if form.errors %}
+                        <div
+                            style="background: #ffebee; color: #c62828; padding: 10px; border-radius: 5px; margin-bottom: 15px; font-size: 0.9rem;">
+                            <strong>Error:</strong> Please correct the fields below.
+                            {{ form.non_field_errors }}
+                            {% for field in form %}
+                            {% if field.errors %}
+                            <div style="margin-top: 5px;">{{ field.label }}: {{ field.errors|striptags }}</div>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
+                        <div style="margin-bottom: 15px;">
+                            <label
+                                style="color: var(--text-secondary); font-size: 0.9rem; display: block; margin-bottom: 5px;">NAME</label>
+                            {{ form.title }}
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <label
+                                style="color: var(--text-secondary); font-size: 0.9rem; display: block; margin-bottom: 5px;">TARGET
+                                AMOUNT</label>
+                            {{ form.target_amount }}
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <label
+                                style="color: var(--text-secondary); font-size: 0.9rem; display: block; margin-bottom: 5px;">DEADLINE</label>
+                            {{ form.target_date }}
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <label
+                                style="color: var(--text-secondary); font-size: 0.9rem; display: block; margin-bottom: 5px;">ICON</label>
+                            {{ form.icon }}
+                        </div>
+
+                        <button type="submit" class="btn-primary"
+                            style="width: 100%; border-radius: 25px; font-weight: bold; font-size: 1rem;">
+                            Create Goal
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        background: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        color: var(--text-primary);
+        box-sizing: border-box;
+    }
+
+    .form-control:focus {
+        border-color: var(--accent-green);
+        outline: none;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="dashboard-container">
+    {% include 'includes/sidebar.html' %}
+    <div class="main-content" style="height: 100vh; overflow-y: auto;">
+        <header style="padding: 20px;">
+            <h1>AI Financial Insights (FIX TEST)</h1>
+        </header>
+
+        <div style="padding: 20px;">
+            {% for item in insights %}
+            <div
+                style="margin-bottom: 20px; padding: 20px; border: 1px solid #ccc; border-radius: 10px; background: #fff;">
+                <b style="color: green; text-transform: uppercase;">CATEGORY: {{ item.category }}</b>
+                <p>INSIGHT: {{ item.text }}</p>
+            </div>
+            {% empty %}
+            <p>No insights found in context.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

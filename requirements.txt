@@ -1,0 +1,11 @@
+Django==4.2
+djangorestframework
+django-cors-headers
+groq
+requests
+pandas
+numpy
+pillow
+redis
+celery
+python-dotenv

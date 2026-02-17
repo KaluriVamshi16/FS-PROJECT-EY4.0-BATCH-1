@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="dashboard-container">
+    {% include 'includes/sidebar.html' %}
+    <div class="main-content">
+        <header style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+            <h1>Budgets</h1>
+            <a href="{% url 'add_budget' %}" class="btn-primary" style="text-decoration: none;">+ Add Budget</a>
+        </header>
+
+        <div class="grid"
+            style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+            {% for budget in budgets %}
+            <div class="card" style="background: white; padding: 20px; border-radius: 10px; box-shadow: var(--shadow);">
+                <h3>{{budget.category.name}}</h3>
+                <p style="color: #666; margin: 10px 0;">Limit: ₹{{budget.monthly_limit}}</p>
+                <div style="background: #eee; height: 10px; border-radius: 5px; overflow: hidden; margin-top: 10px;">
+                    <div
+                        style="width: {{budget.percentage_used|floatformat:0}}%; background: {% if budget.percentage_used >= 75 %}#dc3545{% elif budget.percentage_used > 40 %}#ffc107{% else %}#28a745{% endif %}; height: 100%; transition: width 0.5s ease;">
+                    </div>
+                </div>
+                <p style="text-align: right; font-size: 0.9rem; margin-top: 5px;">
+                    {{budget.percentage_used|floatformat:0}}% Used</p>
+            </div>
+            {% empty %}
+            <div class="card" style="background: white; padding: 20px; border-radius: 10px; box-shadow: var(--shadow);">
+                <p>No budgets set. Create one to start tracking!</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

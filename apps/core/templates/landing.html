@@ -1,0 +1,283 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<header
+    style="padding: 20px 10%; display: flex; justify-content: space-between; align-items: center; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 1000;">
+    <div class="logo" style="display: flex; align-items: center; gap: 12px;">
+        <div
+            style="background: var(--accent-green); color: white; width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);">
+            <i class="fas fa-chart-line" style="font-size: 1.4rem;"></i>
+        </div>
+        <h2 style="color: var(--text-primary); margin: 0; font-weight: 700; letter-spacing: -0.5px;">FinSight</h2>
+    </div>
+    <div class="auth-buttons">
+        <button onclick="openModal('loginModal')" class="btn-outline"
+            style="margin-right: 15px; border-color: #eee; color: var(--text-primary);">Login</button>
+        <button onclick="openModal('registerModal')" class="btn-primary"
+            style="padding: 10px 25px; border-radius: 25px;">Register</button>
+    </div>
+</header>
+
+<section class="hero-section"
+    style="padding: 80px 10%; text-align: center; background: radial-gradient(circle at center, #ffffff 0%, var(--bg-secondary) 100%); min-height: 85vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+    <div class="hero-text" data-aos="fade-down" style="max-width: 850px; margin-bottom: 50px;">
+        <h1 style="font-size: 4rem; margin-bottom: 25px; line-height: 1.1; color: var(--text-primary);">Master Your
+            Finances <span style="color: var(--accent-green);">with AI</span></h1>
+        <p
+            style="font-size: 1.25rem; color: var(--text-secondary); max-width: 650px; margin: 0 auto; line-height: 1.6;">
+            Track expenses, set budgets, and get personalized insights with our smart financial companion.
+        </p>
+    </div>
+
+    <div class="hero-image" data-aos="zoom-in"
+        style="margin-bottom: 50px; width: 100%; max-width: 600px; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.1));">
+        <svg viewBox="0 0 500 400" xmlns="http://www.w3.org/2000/svg" class="floating-img"
+            style="width: 100%; height: auto;">
+            <defs>
+                <linearGradient id="mainGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#4CAF50;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#81C784;stop-opacity:1" />
+                </linearGradient>
+            </defs>
+            <!-- Background Elements -->
+            <rect x="50" y="280" width="400" height="20" rx="10" fill="#f0f0f0" />
+
+            <!-- Isometric Blocks -->
+            <path d="M150,250 L150,150 L200,120 L250,150 L250,250 L200,280 Z" fill="url(#mainGrad)" opacity="0.9" />
+            <path d="M150,150 L200,180 L250,150 L200,120 Z" fill="#A5D6A7" />
+
+            <path d="M300,300 L300,220 L340,200 L380,220 L380,300 L340,320 Z" fill="#2E7D32" opacity="0.7" />
+            <path d="M300,220 L340,240 L380,220 L340,200 Z" fill="#43A047" />
+
+            <!-- Growth Curve -->
+            <path d="M80,320 C150,320 250,250 420,80" stroke="#4CAF50" stroke-width="12" fill="none"
+                stroke-linecap="round" stroke-dasharray="20,15" />
+
+            <!-- Data Floating Nodes -->
+            <circle cx="420" cy="80" r="30" fill="#4CAF50" />
+            <text x="420" y="92" text-anchor="middle" fill="white" font-size="36" font-weight="bold">₹</text>
+
+            <circle cx="200" cy="200" r="10" fill="white" stroke="#4CAF50" stroke-width="3" />
+            <circle cx="340" cy="260" r="8" fill="white" stroke="#2E7D32" stroke-width="3" />
+        </svg>
+    </div>
+
+    <div class="hero-cta" data-aos="fade-up">
+        <button class="btn-primary" onclick="openModal('registerModal')"
+            style="padding: 18px 50px; font-size: 1.2rem; border-radius: 40px; box-shadow: 0 15px 30px rgba(76, 175, 80, 0.3); transition: transform 0.3s ease;">
+            Get Started Now
+        </button>
+    </div>
+</section>
+
+<section class="features" style="padding: 80px 10%;">
+    <h2 style="text-align: center; margin-bottom: 60px; font-size: 2.5rem; color: var(--text-primary);">Intelligent
+        Features</h2>
+    <div class="features-grid">
+        <div class="feature-card" data-aos="fade-up">
+            <div
+                style="background: var(--accent-green-light); width: 60px; height: 60px; border-radius: 15px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                <i class="fas fa-wallet fa-2x" style="color: var(--accent-green);"></i>
+            </div>
+            <h3>Expense Tracker</h3>
+            <p>Log and categorize spending automatically using AI.</p>
+        </div>
+        <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+            <div
+                style="background: var(--accent-green-light); width: 60px; height: 60px; border-radius: 15px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                <i class="fas fa-chart-pie fa-2x" style="color: var(--accent-green);"></i>
+            </div>
+            <h3>Financial Dashboard</h3>
+            <p>Visualize income, expenses, savings and net worth.</p>
+        </div>
+        <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+            <div
+                style="background: var(--accent-green-light); width: 60px; height: 60px; border-radius: 15px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                <i class="fas fa-brain fa-2x" style="color: var(--accent-green);"></i>
+            </div>
+            <h3>AI Insights</h3>
+            <p>Personalized financial advice powered by LLaMA AI.</p>
+        </div>
+        <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+            <div
+                style="background: var(--accent-green-light); width: 60px; height: 60px; border-radius: 15px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                <i class="fas fa-heartbeat fa-2x" style="color: var(--accent-green);"></i>
+            </div>
+            <h3>Health Score</h3>
+            <p>Know your financial fitness at a glance.</p>
+        </div>
+    </div>
+</section>
+
+<section class="team" style="padding: 80px 10%; background: var(--bg-secondary);">
+    <h2 style="text-align: center; margin-bottom: 60px; font-size: 2.5rem;">Meet the Team</h2>
+    <div class="team-grid">
+        <div class="team-card">
+            <div class="team-inner">
+                <div class="team-front">
+                    <div class="avatar">KV</div>
+                    <h3>K. Vamshi</h3>
+                    <p>Team Lead</p>
+                </div>
+                <div class="team-back">
+                    <p>Financial Technology Expert</p>
+                </div>
+            </div>
+        </div>
+        <div class="team-card">
+            <div class="team-inner">
+                <div class="team-front">
+                    <div class="avatar">KV</div>
+                    <h3>K. Vaishnavi</h3>
+                    <p>UI/UX Design</p>
+                </div>
+                <div class="team-back">
+                    <p>Experience Architect</p>
+                </div>
+            </div>
+        </div>
+        <div class="team-card">
+            <div class="team-inner">
+                <div class="team-front">
+                    <div class="avatar">KR</div>
+                    <h3>K. Kishore</h3>
+                    <p>Backend Logic</p>
+                </div>
+                <div class="team-back">
+                    <p>Systems Engineering</p>
+                </div>
+            </div>
+        </div>
+        <div class="team-card">
+            <div class="team-inner">
+                <div class="team-front">
+                    <div class="avatar">BP</div>
+                    <h3>B. Padmaja</h3>
+                    <p>Database</p>
+                </div>
+                <div class="team-back">
+                    <p>Data Infrastructure</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Modals kept for functionality (simplified) -->
+<div id="loginModal" class="modal">
+    <div
+        style="background: white; padding: 40px; border-radius: 20px; width: 400px; position: relative; box-shadow: var(--shadow);">
+        <span onclick="closeModal('loginModal')"
+            style="position: absolute; top: 15px; right: 25px; cursor: pointer; font-size: 30px; color: #ccc;">&times;</span>
+        <h2 style="text-align: center; margin-bottom: 30px;">Welcome Back</h2>
+        <form onsubmit="handleLogin(event)">
+            <input type="text" id="loginUsername" placeholder="Username"
+                style="width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #eee; border-radius: 10px;"
+                required>
+            <input type="password" id="loginPassword" placeholder="Password"
+                style="width: 100%; padding: 12px; margin-bottom: 25px; border: 1px solid #eee; border-radius: 10px;"
+                required>
+            <button type="submit" class="btn-primary"
+                style="width: 100%; padding: 12px; border-radius: 10px;">Login</button>
+        </form>
+    </div>
+</div>
+
+<div id="registerModal" class="modal">
+    <div
+        style="background: white; padding: 40px; border-radius: 20px; width: 400px; position: relative; box-shadow: var(--shadow);">
+        <span onclick="closeModal('registerModal')"
+            style="position: absolute; top: 15px; right: 25px; cursor: pointer; font-size: 30px; color: #ccc;">&times;</span>
+        <h2 style="text-align: center; margin-bottom: 30px;">Create Account</h2>
+        <form onsubmit="handleRegister(event)">
+            <input type="text" id="regUsername" placeholder="Username"
+                style="width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #eee; border-radius: 10px;"
+                required>
+            <input type="email" id="regEmail" placeholder="Email"
+                style="width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #eee; border-radius: 10px;"
+                required>
+            <input type="password" id="regPassword" placeholder="Password"
+                style="width: 100%; padding: 12px; margin-bottom: 25px; border: 1px solid #eee; border-radius: 10px;"
+                required>
+            <button type="submit" class="btn-primary"
+                style="width: 100%; padding: 12px; border-radius: 10px;">Register</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    async function handleLogin(e) {
+        e.preventDefault();
+        const username = document.getElementById('loginUsername').value;
+        const password = document.getElementById('loginPassword').value;
+
+        try {
+            const res = await fetch('/api/auth/login/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({ username, password })
+            });
+            const data = await res.json();
+            if (res.ok) {
+                window.location.href = '/dashboard/';
+            } else {
+                alert(data.message || data.detail || 'Login failed');
+            }
+        } catch (error) {
+            console.error('Error during login:', error);
+            alert('An error occurred. Please try again.');
+        }
+    }
+
+    async function handleRegister(e) {
+        e.preventDefault();
+        const username = document.getElementById('regUsername').value;
+        const email = document.getElementById('regEmail').value;
+        const password = document.getElementById('regPassword').value;
+
+        try {
+            const res = await fetch('/api/auth/register/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({ username, email, password })
+            });
+            const data = await res.json();
+            if (res.ok) {
+                window.location.href = '/dashboard/';
+            } else {
+                alert(data.message || data.detail || 'Registration failed');
+            }
+        } catch (error) {
+            console.error('Error during registration:', error);
+            alert('An error occurred. Please try again.');
+        }
+    }
+</script>
+{% endblock %}

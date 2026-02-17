@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="dashboard-container">
+    {% include 'includes/sidebar.html' %}
+    <div class="main-content"
+        style="display: flex; justify-content: center; align-items: flex-start; padding-top: 50px;">
+
+        <div class="card" style="width: 100%; max-width: 500px; padding: 30px;">
+            <h2 style="color: var(--primary-color); margin-top: 0; margin-bottom: 25px;">Add Transaction</h2>
+
+            <form method="post">
+                {% csrf_token %}
+
+                {% if form.errors %}
+                <div
+                    style="background: #ffebee; color: #c62828; padding: 10px; border-radius: 5px; margin-bottom: 15px; font-size: 0.9rem;">
+                    <strong>Error:</strong> Please correct the fields below.
+                    {{ form.non_field_errors }}
+                    {% for field in form %}
+                    {% if field.errors %}
+                    <div style="margin-top: 5px;">{{ field.label }}: {{ field.errors|striptags }}</div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <div style="margin-bottom: 20px;">
+                    <label
+                        style="display: block; color: var(--text-secondary); margin-bottom: 5px; font-size: 0.9rem; font-weight: bold;">AMOUNT</label>
+                    {{ form.amount }}
+                </div>
+
+                <!-- Type Selection Triggers Change -->
+                <div style="margin-bottom: 20px;">
+                    <label
+                        style="display: block; color: var(--text-secondary); margin-bottom: 5px; font-size: 0.9rem; font-weight: bold;">TYPE</label>
+                    {{ form.type }}
+                </div>
+
+                <!-- Expense Category -->
+                <div id="expense-category-group" style="margin-bottom: 20px;">
+                    <label
+                        style="display: block; color: var(--text-secondary); margin-bottom: 5px; font-size: 0.9rem; font-weight: bold;">CATEGORY</label>
+                    {{ form.expense_category }}
+                </div>
+
+                <!-- Income Source (Hidden by default) -->
+                <div id="income-source-group" style="margin-bottom: 20px; display: none;">
+                    <label
+                        style="display: block; color: var(--text-secondary); margin-bottom: 5px; font-size: 0.9rem; font-weight: bold;">CATEGORY
+                        / SOURCE</label>
+                    {{ form.income_source }}
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label
+                        style="display: block; color: var(--text-secondary); margin-bottom: 5px; font-size: 0.9rem; font-weight: bold;">DESCRIPTION</label>
+                    {{ form.description }}
+                </div>
+
+                <div style="margin-bottom: 25px;">
+                    <label
+                        style="display: block; color: var(--text-secondary); margin-bottom: 5px; font-size: 0.9rem; font-weight: bold;">DATE</label>
+                    {{ form.date }}
+                </div>
+
+                <div style="display: flex; gap: 10px;">
+                    <a href="{% url 'transaction_list' %}" class="btn"
+                        style="flex: 1; text-align: center; border: 1px solid var(--border-color); color: var(--text-primary); text-decoration: none; padding: 10px; border-radius: 25px;">Cancel</a>
+                    <button type="submit" class="btn-primary"
+                        style="flex: 1; border-radius: 25px; font-weight: bold;">Save</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<style>
+    .form-control {
+        width: 100%;
+        padding: 12px;
+        background: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        color: var(--text-primary);
+        box-sizing: border-box;
+        font-size: 1rem;
+    }
+
+    .form-control:focus {
+        border-color: var(--accent-green);
+        outline: none;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const typeSelect = document.getElementById('id_type');
+        const expenseGroup = document.getElementById('expense-category-group');
+        const incomeGroup = document.getElementById('income-source-group');
+        const expenseInput = document.getElementById('id_expense_category');
+        const incomeInput = document.getElementById('id_income_source');
+
+        function toggleFields() {
+            if (typeSelect.value === 'expense') {
+                expenseGroup.style.display = 'block';
+                incomeGroup.style.display = 'none';
+                expenseInput.required = true;
+                incomeInput.required = false;
+            } else {
+                expenseGroup.style.display = 'none';
+                incomeGroup.style.display = 'block';
+                expenseInput.required = false;
+                incomeInput.required = true;
+            }
+        }
+
+        typeSelect.addEventListener('change', toggleFields);
+        toggleFields(); // Init
+    });
+</script>
+{% endblock %}
